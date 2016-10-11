@@ -125,3 +125,84 @@ class Deque(object):
         return self.length==0
     def get_size(self):
         return self.length
+
+#Linked List class using double-linked list
+#support: append,remove,search,index,insert,pop,is_empty,get_size          
+class UnorderedLinkedList(object):
+    
+    class _Node(object):
+        def __init__(self,value):
+            self.value=value
+            self.next=None
+    def __init__(self):
+        self.head=None
+    def append(self,item):
+        node=self._Node(item)
+        if not self.head:
+            self.head=node
+        else:           
+            tmp=self.head
+            while tmp.next:
+                tmp=tmp.next
+            tmp.next=node
+    def remove(self,item):
+        prev=None
+        this=self.head
+        while this.value!=item and this.next:
+            prev=this
+            this=this.next        
+        if prev==None:
+            self.head=this.next
+        else:
+            prev.next=this.next
+    def search(self,item):
+        this=self.head
+        while this:
+            if this.value==item:
+                return True
+            this=this.next        
+        return False
+    def is_empty(self):
+        return self.head==None
+    def get_size(self):
+        length=0
+        this=self.head
+        while this:
+            this=this.next
+            length+=1
+        return length
+    def index(self,item):
+        pos=0
+        this=self.head
+        while this:
+            if this.value==item:
+                return pos
+            this=this.next
+            pos+=1
+        return False
+    def insert(self,pos,item):
+        node=self._Node(item)
+        if pos==0:
+            node.next=self.head
+            self.head=node
+        else:
+            this=self.head
+            while this and pos>0:
+                pos-=1
+                prev=this
+                this=this.next
+            prev.next=node
+            node.next=this
+    def pop(self,pos=0):
+        prev=None
+        this=self.head
+        while this and pos>0:
+            pos-=1
+            prev=this
+            this=this.next
+        if prev==None:
+            node=self.head
+            self.head=node.next
+            return node.value
+        prev.next=this.next
+        return this.value
