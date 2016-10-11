@@ -7,3 +7,5 @@ some basic algorithms.
 1. Stack
 2. Queue
 3. Deque
+4. Linked List
+5. Minumin Binary Heap
