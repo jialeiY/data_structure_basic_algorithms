@@ -206,3 +206,52 @@ class UnorderedLinkedList(object):
             return node.value
         prev.next=this.next
         return this.value
+        
+#minimum binary heap using python list
+#support: insert,find_min,del_min,is_empty,get_size,build_heap
+class Min_BinaryHeap(object):
+    def __init__(self):
+        self.heap=[0]
+        self.length=0
+    def _swim(self):
+        i=self.length
+        while i>1 and self.heap[i]<self.heap[i/2]:
+            self.heap[i/2],self.heap[i]=self.heap[i],self.heap[i/2]
+            i/=2
+    def _sink(self):
+        i=1
+        while 2*i<=self.length:
+            j=2*i
+            if j<self.length and self.heap[j]>self.heap[j+1]:
+                j+=1
+            if self.heap[i]<=self.heap[j]:
+                break
+            self.heap[i],self.heap[j]=self.heap[j],self.heap[i]
+            i=j
+                                  
+    def insert(self,key):
+        self.length+=1
+        if self.length>=len(self.heap):
+            self.heap.append(key)
+        else:
+            self.heap[self.length]=key
+
+        self._swim()
+    def find_min(self):
+        return self.heap[1]
+    def del_min(self):
+        if self.is_empty():
+            return "empty"
+        smallest=self.heap[1]
+        self.heap[1]=self.heap[self.length]
+        self.heap[self.length]=None
+        self.length-=1
+        self._sink()
+        return smallest
+    def is_empty(self):
+        return self.length==0
+    def get_size(self):
+        return self.length
+    def build_heap(self,the_list):
+        for k in the_list:
+            self.insert(k)
