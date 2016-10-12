@@ -255,3 +255,57 @@ class Min_BinaryHeap(object):
     def build_heap(self,the_list):
         for k in the_list:
             self.insert(k)
+
+#Hash table
+#support: put,get,hash_function       
+class HashTable(object):
+    class _Node(object):
+        def __init__(self,key,value):
+            self.key=key
+            self.value=value
+            self.next=None
+    def __init__(self,table_size=11):
+        self.table_size=table_size
+        self.slots=[None]*table_size
+    def hash_function(self,key):
+        return key % self.table_size
+    def put(self,key,val):
+        hash_value=self.hash_function(key)
+        node=self._Node(key,val)
+        if self.slots[hash_value]:
+            tmp_node=self.slots[hash_value]
+            while tmp_node.next:
+                tmp_node=tmp_node.next
+            tmp_node.next=node
+        else:
+            self.slots[hash_value]=node
+            
+    def get(self,key):
+        hash_value=self.hash_function(key)
+        tmp_node=self.slots[hash_value]
+        while tmp_node and tmp_node.key!=key:
+            tmp_node=tmp_node.next
+        if tmp_node:
+            return tmp_node.value
+        return "no key value"
+    def __getitem__(self,key):
+        return self.get(key)
+    def __setitem__(self,key,value):
+        self.put(key,value)
+    def __len__(self):
+        count=0
+        for e in self.slots:
+            if e:
+                tmp_node=e
+                while tmp_node:
+                    count+=1
+                    tmp_node=tmp_node.next
+        return count
+    def __contains__(self,key):
+        hash_value=self.hash_function(key)
+        tmp_node=self.slots[hash_value]
+        while tmp_node and tmp_node.key!=key:
+            tmp_node=tmp_node.next
+        if tmp_node:
+            return True
+        return False
