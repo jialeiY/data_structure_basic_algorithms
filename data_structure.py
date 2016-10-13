@@ -309,3 +309,110 @@ class HashTable(object):
         if tmp_node:
             return True
         return False
+
+#Binary Search Tree
+#support: put,get,delete,find_min,find_rank,search_by_rank,is_empty,get_size            
+class BinarySearchTree(object):
+    class _TreeNode(object):
+        def __init__(self,key,value):
+            self.key=key
+            self.value=value
+            self.left=None
+            self.right=None
+            self.node_num=1
+    def __init__(self):
+        self.root=None
+    def is_empty(self):
+        return self.get_size()==0
+    def get_size(self):
+        if self.root:
+            return self.root.node_num
+        return 0
+    def __contains__(self,key):
+        return self.get(key)!=None
+    def put(self,key,value):
+        if not self.root:
+            self.root=self._TreeNode(key,value)
+        else:
+            self._put(key,value,node=self.root)
+    def _put(self,key,value,node):       
+            node.node_num+=1
+            if key<node.key:
+                if node.left:
+                    self._put(key,value,node.left)
+                else:
+                    node.left=self._TreeNode(key,value)
+            elif key>node.key:
+                if node.right:
+                    self._put(key,value,node.right)
+                else:
+                    node.right=self._TreeNode(key,value)
+            else:
+                node.value=value
+    def get(self,key):
+        return self._get(key,self.root)
+    def _get(self,key,node):
+        if not node:
+            return None
+        if key<node.key:
+            return self._get(key,node.left)
+        elif key>node.key:
+            return self._get(key,node.right)
+        else:
+            return node.value            
+    def delete(self,key):
+        self.root=self._delete(key,self.root)
+    def _delete(self,key,node):
+        if not node:
+            return None
+        if key<node.key:
+            node.left=self._delete(key,node.left)
+        elif key>node.key:
+            node.right=self._delete(key,node.right)
+        else:
+            if not node.left:
+                return node.right
+            if not node.right:
+                return node.left
+            x=self._find_min(node.right)
+            x.right=self._delete(x.key,node.right)
+            x.left=node.left
+            node=x
+        node.node_num=(node.left.node_num if node.left else 0)+ \
+        (node.right.node_num if node.right else 0)+1
+        return node                        
+    def find_min(self):
+        if self.is_empty():
+            return None
+        return self._find_min(self.root).key
+    def _find_min(self,node):
+        while node.left:
+            node=node.left
+        return node
+    def find_rank(self,key):
+        return self._find_rank(key,self.root)
+    def _find_rank(self,key,node):
+        if not node:
+            return None
+        if key<node.key:
+            return self._find_rank(key,node.left)
+        elif key>node.key:
+            rank=self._find_rank(key,node.right)
+            if rank:
+                return rank+(node.left.node_num if node.left else 0)+1
+            return None
+        else:
+            return (node.left.node_num if node.left else 0)+1
+
+    def search_by_rank(self,rank):
+        if rank>self.get_size() or rank==0:
+            return None
+        return self._search_by_rank(rank,self.root).key
+    def _search_by_rank(self,rank,node):
+        left_size=(node.left.node_num if node.left else 0)+1
+        if rank<left_size:
+            return self._search_by_rank(rank,node.left)
+        elif rank>left_size:
+            return self._search_by_rank(rank-left_size,node.right)
+        else:
+            return node
