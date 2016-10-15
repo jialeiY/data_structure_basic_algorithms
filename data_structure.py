@@ -416,3 +416,28 @@ class BinarySearchTree(object):
             return self._search_by_rank(rank-left_size,node.right)
         else:
             return node
+
+#graph
+#support: add_vertex,add_edge,get_vertex,get_vertices
+#also support: "in" operation and loop      
+class Graph(object):
+    def __init__(self):
+        self.vert_list={}
+        
+    def add_vertex(self,v):
+        if v not in self.vert_list:
+            self.vert_list[v]={}
+    def add_edge(self,from_v,to_v,weight=0):
+        if not from_v in self.vert_list:
+            self.add_vertex(from_v)
+        if not to_v in self.vert_list:
+            self.add_vertex(to_v)
+        self.vert_list[from_v][to_v]=weight
+    def get_vertex(self,v_key):
+        return self.vert_list.get(v_key,None)
+    def get_vertices(self):
+        return self.vert_list.keys()
+    def __contains__(self,v):
+        return v in self.vert_list
+    def __iter__(self):
+        return iter(self.vert_list.values())
