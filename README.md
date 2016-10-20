@@ -9,3 +9,6 @@ some basic algorithms.
 3. Deque
 4. Linked List
 5. Minumin Binary Heap
+6. Hash Table
+7. Binary Search Tree
+8. Graph
