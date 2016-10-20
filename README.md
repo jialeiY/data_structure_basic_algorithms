@@ -4,6 +4,8 @@ This repo includes python implementation of data structure and
 some basic algorithms.
 
 ## current implementation:
+
+### "data_structure.py"
 1. Stack
 2. Queue
 3. Deque
@@ -12,3 +14,8 @@ some basic algorithms.
 6. Hash Table
 7. Binary Search Tree
 8. Graph
+
+### "sorting_algorithm.py"
+1. bubble sort
+2. selection sort
+3. insertion sort
