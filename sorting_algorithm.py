@@ -31,3 +31,21 @@ def insertion_sort(the_list):
         print the_list
     return the_list
 #insertion_sort([15, 5, 4, 18, 12, 19, 14, 10, 8, 20])
+
+def shell_sort(the_list):
+    l=len(the_list)    
+    h=1
+    while h<l/3:
+        h=3*h+1
+    while h>=1:
+        for i in xrange(h,l):
+            k=i-h
+            this_value=the_list[i]
+            while the_list[k]>this_value and k>=0:
+                the_list[k+h]=the_list[k]
+                k-=h
+            the_list[k+h]=this_value
+            print the_list 
+        h/=3
+    return the_list
+#shell_sort([5, 16, 20, 12, 3, 8, 9, 17, 19, 7])
