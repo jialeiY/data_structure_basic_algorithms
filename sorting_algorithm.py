@@ -32,6 +32,38 @@ def insertion_sort(the_list):
     return the_list
 #insertion_sort([15, 5, 4, 18, 12, 19, 14, 10, 8, 20])
 
+def merge_sort(the_list):
+    def merge(lo,mid,hi):
+        left=the_list[lo:mid+1]
+        right=the_list[mid+1:hi+1]        
+        i=j=0
+
+        for k in xrange(lo,hi+1):
+            if j>=len(right):
+                the_list[k]=left[i]
+                i+=1    
+            elif i>=len(left):
+                the_list[k]=right[j]
+                j+=1
+            elif left[i]<right[j]:
+                the_list[k]=left[i]
+                i+=1
+            else:
+                the_list[k]=right[j]
+                j+=1
+                
+    def split(lo,hi):
+        if lo<hi:
+            mid=lo+(hi-lo)/2
+            split(lo,mid)
+            split(mid+1,hi)
+            merge(lo,mid,hi)
+            
+    split(0,len(the_list)-1)
+    print the_list
+    return the_list
+#merge_sort([21, 1, 26, 45, 29, 28, 2, 9, 16, 49, 39, 27, 43, 34, 46, 40])
+
 def shell_sort(the_list):
     l=len(the_list)    
     h=1
@@ -49,3 +81,4 @@ def shell_sort(the_list):
         h/=3
     return the_list
 #shell_sort([5, 16, 20, 12, 3, 8, 9, 17, 19, 7])
+
