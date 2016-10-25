@@ -82,3 +82,34 @@ def shell_sort(the_list):
     return the_list
 #shell_sort([5, 16, 20, 12, 3, 8, 9, 17, 19, 7])
 
+import random
+def quick_sort(the_list):
+    #random.shuffle(the_list)
+    print 'shuffle:',the_list
+    def sort(the_list,lo,hi):
+        if lo<hi:
+            mid=partition(the_list,lo,hi)
+            sort(the_list,lo,mid-1)
+            sort(the_list,mid+1,hi)
+        
+    def partition(the_list,lo,hi):
+        pivot=the_list[lo]
+        lt=lo+1
+        gt=hi
+        print the_list,lo,hi,lt,gt
+        while 1:
+            
+            while lt<=hi and the_list[lt]<=pivot :
+                lt+=1
+            while gt>=lo and the_list[gt]>pivot:
+                gt-=1
+            if lt>gt:
+                break
+            the_list[lt],the_list[gt]=the_list[gt],the_list[lt]
+    
+        the_list[lo],the_list[gt]=the_list[gt],the_list[lo]
+
+        return gt
+    sort(the_list,0,len(the_list)-1)
+    return the_list
+#print quick_sort([14, 14, 13, 15, 19, 10, 3, 16, 9, 14])
