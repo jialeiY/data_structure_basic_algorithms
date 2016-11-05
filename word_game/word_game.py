@@ -36,7 +36,7 @@ def transpose(matrix):
 def removed(letters,remove):
     """Return a str of letter, with each letter in remove removed once"""
     for l in remove:
-        letters=letters.replace(l,'',1)
+        letters=letters.replace(l if l.isupper() else '_','',1)
     return letters
     
 def find_words(hand,pre='',results=None):
@@ -57,10 +57,12 @@ def find_prefixes(hand,pre='',results=None):
     if (hand,pre) in cache:
         results|=cache[(hand,pre)]
         return results
-    if pre in PREFIX:
+    if pre.upper() in PREFIX:
         results.add(pre)
         for l in hand:
-            find_prefixes(hand.replace(l,"",1),pre+l,results) 
+            l2=map(str.lower,LETTERS) if l=='_' else [l]
+            for ll in l2:
+                find_prefixes(hand.replace(ll if ll.upper() else '_',"",1),pre+ll,results) 
         cache[(hand,pre)]=results
     return results
 
@@ -75,17 +77,20 @@ def is_empty(sq):
 def add_suffixes(hand, pre, start, row, results, anchored=True):
     "Add all possible suffixes, and accumulate (start, word) pairs in results."
     i = start + len(pre)
-    if pre in WORDS and anchored and not is_letter(row[i]):
+    if pre.upper() in WORDS and anchored and not is_letter(row[i]):
         results.add((start, pre))
-    if pre in PREFIX:       
+    if pre.upper() in PREFIX:       
         sq = row[i]
         if is_letter(sq):
             add_suffixes(hand, pre+sq, start, row, results)        
         elif is_empty(sq):        
             possibilities = sq if isinstance(sq, set) else ANY
             for L in hand:
-                if L in possibilities:
-                    add_suffixes(hand.replace(L, '', 1), pre+L, start, row, results)
+                L2=map(str.lower,LETTERS) if L=='_' else [L]
+
+                for l in L2:
+                    if l.upper() in possibilities:
+                        add_suffixes(hand.replace(l if l.isupper() else '_', '', 1), pre+l, start, row, results)
     return results
 
 def legal_prefix(i, row):
@@ -167,7 +172,7 @@ def calculate_score(board, pos, direction, hand, word):
                       3 if b == TW else 2 if b in (DW,'*') else 1)
         letter_mult = (1 if is_letter(sq) else
                        3 if b == TL else 2 if b == DL else 1)
-        total += POINTS[L] * letter_mult
+        total += POINTS[L if L.isupper() else '_'] * letter_mult
         if isinstance(sq, set) and sq is not ANY and direction is not DOWN:
             crosstotal += cross_word_score(board, L, (i, j), other_direction)
     return crosstotal + word_mult * total
@@ -292,10 +297,11 @@ def test():
     'DEUT', 'ADEQ', 'Q', 'QU', 'QT', 'AUD', 'EQUA', 'AQUAT', 'AQUA', 'T', 'QA',
     'ADEQU', 'QUE', 'EDU', 'U', 'ADEQUAT', 'TUE', 'AUT'])
     
-    show_best('ADEQUAT',a_board())
+    #show_best('ADEQUAT',a_board())
     
     t, results = timedcall(find_prefixes,'ADEQUAT')
-
+    show_best('_BCEHKN',a_board())  
+    
     print 'tests pass'
 
 test()
